@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Antrian Konter Pulsa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Header Bagian -->
+    <header class="main-header">
+        <div class="header-container">
+            <h1>Simulasi Antrian Konter Pulsa</h1>
+            <nav>
+                <ul>
+                    <li><a href="#info">Studi Kasus</a></li>
+                    <li><a href="#form">Masukkan Data</a></li>
+                    <li><a href="#result">Hasil</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content-container">
+            <!-- Bagian Studi Kasus -->
+            <div id="info" class="card info-card">
+                <h2>Studi Kasus: Antrian Konter Pulsa</h2>
+                <p>Di sebuah konter pulsa, rata-rata waktu antar kedatangan pelanggan adalah 8 menit, sementara rata-rata waktu pelayanan oleh dua pelayan adalah 5 menit.</p>
+                <p>Dengan menggunakan metode antrian, Anda bisa menghitung waktu tunggu rata-rata pelanggan dan tingkat pemanfaatan pelayan untuk meningkatkan efisiensi konter.</p>
+            </div>
+
+            <!-- Bagian Form Masukkan Data -->
+            <div id="form" class="card input-card">
+                <h2>Masukkan Data</h2>
+                <form method="post">
+                    <div class="form-group">
+                        <label for="arrival_time">Waktu Antar Kedatangan (menit):</label>
+                        <input type="number" id="arrival_time" name="arrival_time" placeholder="Masukkan waktu antar kedatangan" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service_time">Waktu Pelayanan (menit):</label>
+                        <input type="number" id="service_time" name="service_time" placeholder="Masukkan waktu pelayanan" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Hitung</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bagian Hasil -->
+        {% if error_message %}
+        <div class="card error-card">
+            <p>{{ error_message }}</p>
+        </div>
+        {% elif result %}
+        <div id="result" class="card result-card">
+            <h2>Hasil Perhitungan</h2>
+            <ul>
+                <li>Laju Kedatangan (λ): {{ result['arrival_rate'] }}</li>
+                <li>Laju Pelayanan (μ): {{ result['service_rate'] }}</li>
+                <li>Tingkat Pemanfaatan Sistem (ρ): {{ result['utilization'] }}</li>
+                <li>Probabilitas Tidak Ada Pelanggan (P0): {{ result['p0'] }}</li>
+                <li>Rata-rata Pelanggan dalam Antrian (Lq): {{ result['average_queue_length'] }}</li>
+                <li>Waktu Tunggu di Antrian (Wq): {{ result['average_wait_time_queue'] }} menit</li>
+                <li>Waktu Rata-rata di Sistem (W): {{ result['average_wait_time_system'] }} menit</li>
+                <li>Pelanggan Rata-rata dalam Sistem (L): {{ result['average_customers_system'] }}</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

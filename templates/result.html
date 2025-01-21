@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Perhitungan Antrian</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 800px; /* Menetapkan lebar maksimum agar tidak terlalu lebar */
+            width: 100%;
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .result-card {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2 {
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        h3 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .steps {
+            margin-top: 20px;
+        }
+
+        .step {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+
+        .step-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .step-content {
+            font-size: 1em;
+            color: #555;
+        }
+
+        .step-content pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .error-card {
+            padding: 15px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="main-header">
+            <h1>Hasil Perhitungan Antrian</h1>
+        </header>
+
+        <div class="card result-card">
+            <h2>Hasil Perhitungan</h2>
+
+            {% if error_message %}
+                <div class="error-card">
+                    <p>{{ error_message }}</p>
+                </div>
+            {% else %}
+                <ul>
+                    <li><strong>Laju Kedatangan (λ):</strong> {{ result['arrival_rate'] }}</li>
+                    <li><strong>Laju Pelayanan (μ):</strong> {{ result['service_rate'] }}</li>
+                    <li><strong>Tingkat Pemanfaatan Sistem (ρ):</strong> {{ result['utilization'] }}</li>
+                    <li><strong>Probabilitas Tidak Ada Pelanggan (P0):</strong> {{ result['p0'] }}</li>
+                    <li><strong>Rata-rata Pelanggan dalam Antrian (Lq):</strong> {{ result['average_queue_length'] }}</li>
+                    <li><strong>Waktu Tunggu di Antrian (Wq):</strong> {{ result['average_wait_time_queue'] }} menit</li>
+                    <li><strong>Waktu Rata-rata di Sistem (W):</strong> {{ result['average_wait_time_system'] }} menit</li>
+                    <li><strong>Pelanggan Rata-rata dalam Sistem (L):</strong> {{ result['average_customers_system'] }}</li>
+                </ul>
+
+                <h3>Langkah-Langkah Perhitungan:</h3>
+                <div class="steps">
+
+                    <!-- Langkah 1 -->
+                    <div class="step">
+                        <h4 class="step-title">1. Menghitung Laju Kedatangan (λ):</h4>
+                        <div class="step-content">
+                            <p>Laju kedatangan (arrival rate) dihitung dengan mengambil kebalikan dari waktu antar kedatangan pelanggan.</p>
+                            <p><strong>Rumus:</strong></p>
+                            <pre>𝜆 = 1 / Waktu Kedatangan</pre>
+                            <p><strong>Contoh:</strong> 𝜆 = 1 / 0.067 = 0.067 pelanggan per menit</p>
+                        </div>
+                    </div>
+
+                    <!-- Langkah 2 -->
+                    <div class="step">
+                        <h4 class="step-title">2. Menghitung Laju Pelayanan (μ):</h4>
+                        <div class="step-content">
+                            <p>Laju pelayanan (service rate) dihitung dengan mengambil kebalikan dari waktu pelayanan oleh pelayan.</p>
+                            <p><strong>Rumus:</strong></p>
+                            <pre>𝜇 = 1 / Waktu Pelayanan</pre>
+                            <p><strong>Contoh:</strong> 𝜇 = 1 / 0.1 = 0.1 pelanggan per menit</p>
+                        </div>
+                    </div>
+
+                    <!-- Langkah 3 -->
+                    <div class="step">
+                        <h4 class="step-title">3. Menghitung Tingkat Pemanfaatan Sistem (ρ):</h4>
+                        <div class="step-content">
+                            <p>Tingkat pemanfaatan sistem (utilization) mengukur seberapa banyak sistem digunakan oleh pelayan. Jika ρ lebih besar atau sama dengan 1, sistem dianggap tidak stabil.</p>
+                            <p><strong>Rumus:</strong></p>
+                            <pre>𝜌 = λ / (2 ⋅ μ)</pre>
+                            <p>Di mana <strong>2</strong> adalah jumlah pelayan dalam sistem.</p>
+                            <p><strong>Contoh:</strong> 𝜌 = 0.333</p>
+                        </div>
+                    </div>
+
+                    <!-- Langkah 4 -->
+                    <div class="step">
+                        <h4 class="step-title">4. Menghitung Waktu Rata-Rata dalam Sistem (W):</h4>
+                        <div class="step-content">
+                            <p>W adalah waktu rata-rata yang dihabiskan pelanggan dalam sistem, yaitu waktu yang dihabiskan baik dalam antrian maupun dalam pelayanan.</p>
+                            <p><strong>Rumus:</strong></p>
+                            <pre>W = 1 / (μ - λ / 2)</pre>
+                            <p><strong>Contoh:</strong> W = 11.25 menit</p>
+                        </div>
+                    </div>
+
+                    <!-- Langkah 5 -->
+                    <div class="step">
+                        <h4 class="step-title">5. Menghitung Waktu Tunggu Rata-Rata dalam Antrian (Wq):</h4>
+                        <div class="step-content">
+                            <p>Wq adalah waktu rata-rata yang dihabiskan pelanggan dalam antrian sebelum dilayani.</p>
+                            <p><strong>Rumus:</strong></p>
+                            <pre>Wq = λ² / (2μ(μ - λ / 2))</pre>
+                            <p><strong>Contoh:</strong> Wq = 1.25 menit</p>
+                        </div>
+                    </div>
+
+                </div>
+            {% endif %}
+
+            <!-- Tombol Kembali ke Halaman Index -->
+            <a href="{{ url_for('index') }}" class="btn-back">Kembali ke Halaman Index</a>
+        </div>
+    </div>
+
+</body>
+</html>

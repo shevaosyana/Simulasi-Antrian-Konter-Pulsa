@@ -1,0 +1,155 @@
+/* Reset beberapa default styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Tata letak umum */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header.main-header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+header .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Container utama untuk konten */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* Flexbox container untuk info dan form */
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Bagian Studi Kasus */
+.card.info-card {
+    background-color: #fff;
+    padding: 20px;
+    flex: 1; /* Membuatnya fleksibel */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card.info-card h2 {
+    color: #333;
+}
+
+.card.info-card p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* Bagian Form Input Data */
+.card.input-card {
+    background-color: #fff;
+    padding: 20px;
+    flex: 1; /* Membuatnya fleksibel */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card.input-card h2 {
+    color: #333;
+}
+
+.card.input-card .form-group {
+    margin-bottom: 15px;
+}
+
+.card.input-card label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card.input-card input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.card.input-card button {
+    padding: 10px 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.card.input-card button:hover {
+    background-color: #555;
+}
+
+/* Bagian Hasil */
+.card.result-card {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card.result-card h2 {
+    color: #333;
+}
+
+.card.result-card ul {
+    list-style-type: none;
+}
+
+.card.result-card li {
+    margin-bottom: 10px;
+}
+
+/* Card Error */
+.card.error-card {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+/* Responsivitas */
+@media (max-width: 768px) {
+    .content-container {
+        flex-direction: column;
+    }
+
+    .card.info-card, .card.input-card {
+        flex: 1 1 100%;
+    }
+}
